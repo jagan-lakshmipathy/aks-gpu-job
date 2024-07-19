@@ -3,7 +3,7 @@
 
 
 ### 1. Introduction
-We will outline steps involved in running a sample machine learning job in a GPU Enhanced nodepool in Azure Kubernetes (AKS). Let's start with a caveat, the steps provided here are not cloud provider agnostic, particularly the Azure CLI commands. So, you will have to make necessary changes to suit the CLI of your preferred cloud vendor. 
+This repo contains a well known working example of a simple machine learning job that will run in both CPU and GPU. We will demonstrate a step-by-step process on how to run the above mentioned simple machine learning workload in a GPU enhanced vCPU in Azure Kubernetes (AKS). Let's start with a caveat, the steps provided here are not cloud provider agnostic, particularly the Azure CLI commands. So, you will have to make necessary changes to suit the CLI of your preferred cloud vendor. Similarly, the bash scripts shown here have to be modified to suit your shell of choice.
 
 
 ### 2. Prerequesites
