@@ -13,8 +13,11 @@ We refer you to learn about Azure Kubernetes Service (AKS) from [here](https://l
 
 We will be using MacOS to run the kubernetes commands and Azure CLI commands using bash shell. You can follow along with your prefered host, operating system and shell.
 
+### 3. What's in this Repo?
+This repo contains a Dockerfile, mnist.py (a well know CPU/GPU machine learning sample), pytorch-demo.yaml (a sample job manifest), requirements.txt (contains some python depdencies) and finaly this READMe.md. Feel free to browse them. 
 
-### 3. Lets Get Started
+
+### 4. Lets Get Started
 We assume that the kubernetes cluster is up and running for us to be able to run the GPU workloads.The following are the steps:
 
 1. Login to your Azure Portal and make sure the kubernetes cluster is up and running.You can also check the cluster from your bash console. For that to work we need to have the *kubectl* working. So go to Step 2, before you try out any *kubectl* commands. 
