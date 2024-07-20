@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: pytorch-demo
+  name: pytorch-demo
+spec:
+  template:
+    metadata:
+      labels:
+        app: pytorch-demo
+    spec:
+      containers:
+      - name: pytorch-rephrase-demo
+        image: jaganacr07202024.azurecr.io/pytorch-demo:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+           nvidia.com/gpu: 1
+      restartPolicy: OnFailure
+      tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "gpu"
+        effect: "NoSchedule"

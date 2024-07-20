@@ -19,7 +19,7 @@ We assume that the kubernetes cluster is up and running for us to be able to run
 
 1. Login to your Azure Portal and make sure the kubernetes cluster is up and running.You can also check the cluster from your bash console. For that to work we need to have the *kubectl* working. So go to Step 2, before you try out any *kubectl* commands. 
 
-2. In order to issue kubectl commands to control AKS cluster from your local console we need to merge the credentials with the local kube config. Kubernetes config file is typically located under /Users/<username>/.kube/config in MacOS. The following azure cli command would merge the config. The second command lets you see the running pods in the cluster:
+2. In order to issue kubectl commands to control AKS cluster from your local console we need to merge the credentials with the local kube config. Kubernetes config file is typically located under /Users/\<username\>/.kube/config in MacOS. The following azure cli command would merge the config. The second command lets you see the running pods in the cluster:
 
 ```
     bash> az aks get-credentials --resource-group <resource-group-name> --name <aks-cluster-name>
@@ -38,7 +38,7 @@ We assume that the kubernetes cluster is up and running for us to be able to run
 	bash> 	az provider register --namespace Microsoft.ContainerService
 
 ```
-4. Now that your kubernetes cluster is up and running, lets add a nodepool with just one node with H100 GPU (check Azure documentation to see the Azure's latest offering). You can choose any GPU loaded vCPU from Azure offering that you are eligible to request as per your quota requirements.
+4. Now that your kubernetes cluster is up and running, lets add a nodepool with just one node with H100 GPU (check Azure documentation to see the Azure's latest offering). You can choose any GPU loaded vCPU from Azure offering that you are eligible to request as per your quota requirements. I tried these GPU loaded nodes Standard_NC24s_v3, and Standard_NC40ads_H100_v5 from the NCv3-series and NCads H100 v5-series familes respectively.
 
 ```
     bash> az aks nodepool add --resource-group <name-of-resource-group> --cluster-name <cluster-name> --name <nodepool-name> --node-count 2 --node-vm-size Standard_NC40ads_H100_v5 --node-taints sku=gpu:NoSchedule --aks-custom-headers UseGPUDedicatedVHD=true --enable-cluster-autoscaler --min-count 1 --max-count 3
@@ -68,16 +68,22 @@ We assume that the kubernetes cluster is up and running for us to be able to run
     bash> docker push <acr-name>.azurecr.io/<your-tag-name>
 ```
 
-9. Create a job manifest that refers to the pushed image. A template job manifest is provided in the repo.
-
-
-10. Run the job as follows:
+9. Now that we have pushed the image to the ACR, we have to now attach that ACR to the cluster so that our job can access the ACR to pull the image from. We use the following command.
 
 ```
-    kubectl apply -f pytorch-example.yaml
+    bash> az aks update --name <aks-cluster-name> --resource-group <aks-rg-name>  --attach-acr <name-of-acr-to-attach>
 ```
 
-10. Now the job is running you can monitor/troubleshoot the job with the following commands:
+10. Create a job manifest that refers to the pushed image. A template job manifest is provided "pytorch-demo.yaml" in the repository. Feel free to browse the content. Pay particular attention to the image, imagePullPolicy, and resources fields under job.spec. You have to customize it to your needs. Also, pay attention to the Job.spec.tolerations. It basically refers to the node pool created in step 4.
+
+
+11. Run the job as follows:
+
+```
+    kubectl apply -f pytorch-demo.yaml
+```
+
+12. Now the job is running you can monitor/troubleshoot the job with the following commands:
 
 ```
     kubectl get pods --watch
